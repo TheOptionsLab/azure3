@@ -1,7 +1,7 @@
 package netgloo.controllers;
 
 import netgloo.models.User;
-import netgloo.models.UserDao;
+import netgloo.repository.UserRepository;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * A class to test interactions with the MySQL database using the UserDao class.
+ * A class to test interactions with the MySQL database using the UserRepository class.
  *
  * @author netgloo
  */
@@ -36,7 +36,7 @@ public class UserController {
     User user = null;
     try {
       user = new User(email, name);
-      userDao.save(user);
+      userRepository.save(user);
     }
     catch (Exception ex) {
       return "Error creating the user: " + ex.toString();
@@ -55,7 +55,7 @@ public class UserController {
   public String delete(long id) {
     try {
       User user = new User(id);
-      userDao.delete(user);
+      userRepository.delete(user);
     }
     catch (Exception ex) {
       return "Error deleting the user: " + ex.toString();
@@ -74,7 +74,7 @@ public class UserController {
   public String getByEmail(String email) {
     String userId;
     try {
-      User user = userDao.findByEmail(email);
+      User user = userRepository.findByEmail(email);
       userId = String.valueOf(user.getId());
     }
     catch (Exception ex) {
@@ -96,10 +96,10 @@ public class UserController {
   @ResponseBody
   public String updateUser(long id, String email, String name) {
     try {
-      User user = userDao.findOne(id);
+      User user = userRepository.findOne(id);
       user.setEmail(email);
       user.setName(name);
-      userDao.save(user);
+      userRepository.save(user);
     }
     catch (Exception ex) {
       return "Error updating the user: " + ex.toString();
@@ -112,6 +112,6 @@ public class UserController {
   // ------------------------
 
   @Autowired
-  private UserDao userDao;
+  private UserRepository userRepository;
   
 } // class UserController
